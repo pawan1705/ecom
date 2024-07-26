@@ -1,0 +1,21 @@
+.container{
+    display:flex;
+    flex-direction: row;
+    margin-top: 5%;
+}
+
+.container .details{
+    display: block;
+    margin: auto;
+    margin-left: 20px;
+    font-size: 16px;
+    font-weight: 700;
+}
+.container .details .heading{
+    background: linear-gradient(to right ,#434343, #096446);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color:antiquewhite;
+    font-size: 20px;
+    text-align: center;
+}

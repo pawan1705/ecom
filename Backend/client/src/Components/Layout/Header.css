@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Hand:wght@400..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+.navbar{
+    color:white;
+    font-family:Poppins;
+    font-size: 16px;
+    line-height: 26px;
+    text-transform: uppercase;
+    font-weight: 700;
+    box-shadow: 0 8px 6px -6px grey;
+    --webkit-box-shadow: 0 8px 6px -6px gray;
+    border-bottom: 0.5px solid gray !important;
+    background: linear-gradient(to right ,#434343, #096446);
+}
+
+.name1{
+    color:white;
+    font-family: cursive;
+    margin-left: 20px;
+    cursor: pointer;
+}
+.name{
+    color:white;
+    font-family: cursive;
+    margin-right: 50px;
+    cursor: pointer;
+    letter-spacing: 2px;
+}
+Link{
+    color:white;
+    font-weight: 300 !important;
+    cursor: pointer;
+}
+
+.option li:hover{
+    color: whitesmoke;
+    border-bottom : 2px solid white;
+}
+.nav-link{
+    color:white;
+}
+
+    
