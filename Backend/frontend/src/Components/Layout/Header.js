@@ -1,11 +1,13 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { TbShoppingCartBolt } from "react-icons/tb";
 import { useAuth } from "../../context/auth";
 import toast from "react-hot-toast";
+import { useReducer } from "react";
 // import { assets } from "../../assets/assets";
 import "./Header.css";
+import { useEffect } from "react";
 const Header = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [auth, setAuth] = useAuth();
 
   const handleLogout = () => {
@@ -16,7 +18,7 @@ const Header = () => {
     });
     localStorage.removeItem("auth");
     toast.success("Logout Successfully");
-    // navigate("/login");
+    navigate("/login");
   };
   return (
     <nav className="navbar navbar-expand-lg  ">
@@ -90,15 +92,39 @@ const Header = () => {
               </>
             ) : (
               <>
-                <li className="nav-item">
+                <li className="nav-item dropdown ">
                   <Link
-                    to="/login"
-                    onClick={handleLogout}
-                    className="nav-link "
-                    aria-current="page"
+                    to=""
+                    className="nav-link dropdown-toggle "
+                    role="button"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    style={{ color: "	#ffc0cb" }}
                   >
-                    Logout
+                    {auth?.user?.name}
                   </Link>
+                  <div
+                    className="dropdown-menu"
+                    aria-labelledby="navbarDropdown"
+                  >
+                    <Link
+                      to={`/dashboard/${
+                        auth?.user?.role === 1 ? "admin" : "user"
+                      }`}
+                      className="dropdown-item "
+                    >
+                      Dashboard
+                    </Link>
+                    <div className="dropdown-divider" />
+                    <Link
+                      to="/login"
+                      onClick={handleLogout}
+                      className="dropdown-item"
+                    >
+                      Logout
+                    </Link>
+                  </div>
                 </li>
               </>
             )}

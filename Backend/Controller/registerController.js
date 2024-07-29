@@ -3,7 +3,7 @@ import UserSchemaModel from "../Models/UserModel.js";
 import JWT from "jsonwebtoken";
 export const save = async (req, res) => {
   try {
-    const { name, email, password, phone, address } = req.body;
+    const { name, email, password, phone, address, answer } = req.body;
     if (!name) {
       return res.send({ message: "Name is required" });
     }
@@ -18,6 +18,9 @@ export const save = async (req, res) => {
     }
     if (!address) {
       return res.send({ message: "Address is required" });
+    }
+    if (!answer) {
+      return res.send({ message: "Answer is required" });
     }
 
     //check  user
@@ -35,6 +38,7 @@ export const save = async (req, res) => {
       email,
       phone,
       address,
+      answer,
       password: hashedPassword,
     }).save();
 
@@ -87,6 +91,8 @@ export const login = async (req, res) => {
         email: user.email,
         phone: user.phone,
         address: user.address,
+        answer: user.answer,
+        role: user.role,
       },
       token,
     });
@@ -109,4 +115,41 @@ export const protect = (req, res) => {
   res.status(200).send({
     ok: true,
   });
+};
+
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email, answer, newPassword } = req.body;
+    if (!email) {
+      res.status(400).send({ message: "Email is required" });
+    }
+    if (!answer) {
+      res.status(400).send({ message: "answer is required" });
+    }
+    if (!newPassword) {
+      res.status(400).send({ message: "New Password is required" });
+    }
+    //check
+    const user = await UserSchemaModel.findOne({ email, answer });
+    //validation
+    if (!user) {
+      return res.status(404).send({
+        success: false,
+        message: "Wrong Email Or Answer",
+      });
+    }
+    const hashed = await hashPassword(newPassword);
+    await UserSchemaModel.findByIdAndUpdate(user._id, { password: hashed });
+    res.status(200).send({
+      success: true,
+      message: "Password Reset Successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Something went wrong",
+      error,
+    });
+  }
 };

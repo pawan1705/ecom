@@ -12,6 +12,7 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [answer, setAnswer] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,6 +25,7 @@ const Register = () => {
           password,
           phone,
           address,
+          answer,
         }
       );
       if (res.data.success) {
@@ -94,6 +96,17 @@ const Register = () => {
               required
             />
           </div>
+          <div className="mb-2">
+            <input
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              type="text"
+              className="form-control"
+              placeholder=" your father birth Year"
+              required
+            />
+          </div>
+
           <button
             type="submit"
             className="btn btn-primary"

@@ -32,6 +32,10 @@ const userSchema = mongoose.Schema(
       required: [true, "address is required"],
       trim: true,
     },
+    answer: {
+      type: String,
+      require: true,
+    },
     role: {
       type: Number,
       default: 0,

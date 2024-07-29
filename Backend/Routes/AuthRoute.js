@@ -9,8 +9,18 @@ router.post("/login", registerController.login);
 router.get("/test", requireSignIn, isAdmin, registerController.test);
 
 //protected Route
+//user Route
 router.get("/user-auth", requireSignIn, (req, res) => {
   res.status(200).send({ ok: true });
 });
+
+//admin route
+router.get("/admin-auth", requireSignIn, isAdmin, (req, res) => {
+  res.status(200).send({ ok: true });
+});
 // router.get("/user-auth", requireSignIn, registerController.protect);
+
+//forget password
+
+router.post("/change-password", registerController.forgotPassword);
 export default router;
