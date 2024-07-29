@@ -7,4 +7,10 @@ router.post("/register", registerController.save);
 router.post("/login", registerController.login);
 
 router.get("/test", requireSignIn, isAdmin, registerController.test);
+
+//protected Route
+router.get("/user-auth", requireSignIn, (req, res) => {
+  res.status(200).send({ ok: true });
+});
+// router.get("/user-auth", requireSignIn, registerController.protect);
 export default router;

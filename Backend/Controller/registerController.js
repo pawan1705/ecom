@@ -4,13 +4,28 @@ import JWT from "jsonwebtoken";
 export const save = async (req, res) => {
   try {
     const { name, email, password, phone, address } = req.body;
+    if (!name) {
+      return res.send({ message: "Name is required" });
+    }
+    if (!email) {
+      return res.send({ message: "Email is required" });
+    }
+    if (!password) {
+      return res.send({ message: "Password is required" });
+    }
+    if (!phone) {
+      return res.send({ message: "Phone is required" });
+    }
+    if (!address) {
+      return res.send({ message: "Address is required" });
+    }
 
     //check  user
     const existingUser = await UserSchemaModel.findOne({ email });
     //check existing user
     if (existingUser) {
       return res.status(200).send({
-        success: true,
+        success: false,
         message: "Already registered please login!!",
       });
     }
@@ -87,4 +102,11 @@ export const login = async (req, res) => {
 
 export const test = (req, res) => {
   res.send("protected Route");
+};
+
+export const protect = (req, res) => {
+  res.send("Ok");
+  res.status(200).send({
+    ok: true,
+  });
 };

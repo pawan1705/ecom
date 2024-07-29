@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import connectDB from "./config/db.js";
 import authRoute from "./Routes/AuthRoute.js";
+import cors from "cors";
 dotenv.config();
 const app = express();
 
@@ -11,6 +12,7 @@ const app = express();
 connectDB();
 
 //middleware
+app.use(cors());
 app.use(express.json()); //place of bodyParser
 app.use(morgan("dev"));
 
