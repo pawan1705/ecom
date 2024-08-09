@@ -9,10 +9,15 @@ import Login from "./Pages/Auth/Login";
 import Dashboard from "./Pages/user/Dashboard";
 import PrivateRoute from "./Components/Routes/Private";
 import AdminRoute from "./Components/Routes/AdminRoute";
-import "./App.css";
 import ForgotPassword from "./Pages/Auth/ForgotPassword";
 import AdminDashboard from "./Pages/Admin/AdminDashboard";
-
+import CreateProduct from "./Pages/Admin/CreateProduct";
+import Product from "./Pages/Admin/Product";
+import CreateCategory from "./Pages/Admin/CreateCategory";
+import Users from "./Pages/Admin/Users";
+import Profile from "./Pages/user/Profile";
+import Order from "./Pages/user/Order";
+import "./App.css";
 function App() {
   return (
     <>
@@ -26,10 +31,16 @@ function App() {
 
         <Route path="/dashboard" element={<PrivateRoute />}>
           <Route path="user" element={<Dashboard />} />
+          <Route path="user/profile" element={<Profile />} />
+          <Route path="user/order" element={<Order />} />
         </Route>
 
         <Route path="/dashboard" element={<AdminRoute />}>
           <Route path="admin" element={<AdminDashboard />} />
+          <Route path="admin/create-product" element={<CreateProduct />} />
+          <Route path="admin/create-category" element={<CreateCategory />} />
+          <Route path="admin/users" element={<Users />} />
+          <Route path="admin/products" element={<Product />} />
         </Route>
 
         <Route path="/pagenotfound" element={<Pagenotfound />} />
