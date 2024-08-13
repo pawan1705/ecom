@@ -18,6 +18,7 @@ import Users from "./Pages/Admin/Users";
 import Profile from "./Pages/user/Profile";
 import Order from "./Pages/user/Order";
 import "./App.css";
+import UpdateProduct from "./Pages/Admin/UpdateProduct";
 function App() {
   return (
     <>
@@ -38,6 +39,7 @@ function App() {
         <Route path="/dashboard" element={<AdminRoute />}>
           <Route path="admin" element={<AdminDashboard />} />
           <Route path="admin/create-product" element={<CreateProduct />} />
+          <Route path="admin/product/:_id" element={<UpdateProduct />} />
           <Route path="admin/create-category" element={<CreateCategory />} />
           <Route path="admin/users" element={<Users />} />
           <Route path="admin/products" element={<Product />} />

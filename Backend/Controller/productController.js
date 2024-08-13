@@ -77,7 +77,7 @@ export const getProducts = async (req, res) => {
 //get single product
 export const getSingleProducts = async (req, res) => {
   try {
-    const product = await ProductSchemaModel.findOne({ id: req.params.pid })
+    const product = await ProductSchemaModel.findOne({ slug: req.params.slug })
       .populate("category")
       .select("-image");
     res.status(200).send({
@@ -133,26 +133,25 @@ export const deleteProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
   try {
-    const { name, slug, description, price, category, quantity, shipping } =
+    const { name, description, price, category, quantity, shipping } =
       req.fields;
     const { image } = req.files;
-
     //validation
     switch (true) {
       case !name:
-        return res.status(500).send({ error: "name is required" });
+        return res.status(500).send({ error: "Name is Required" });
       case !description:
-        return res.status(500).send({ error: "description is required" });
+        return res.status(500).send({ error: "Description is Required" });
       case !price:
-        return res.status(500).send({ error: "price is required" });
+        return res.status(500).send({ error: "Price is Required" });
       case !category:
-        return res.status(500).send({ error: "category is required" });
+        return res.status(500).send({ error: "Category is Required" });
       case !quantity:
-        return res.status(500).send({ error: "quantity is required" });
-      case !image && image.size > 10000:
+        return res.status(500).send({ error: "Quantity is Required" });
+      case image && image.size > 1000000:
         return res
           .status(500)
-          .send({ error: "image is required and should be less than 1MB" });
+          .send({ error: "image is Required and should be less then 1mb" });
     }
 
     const products = await ProductSchemaModel.findByIdAndUpdate(
@@ -165,7 +164,6 @@ export const updateProduct = async (req, res) => {
       products.image.contentType = image.type;
     }
     await products.save();
-
     res.status(201).send({
       success: true,
       message: "Product Updated Successfully",
@@ -175,8 +173,8 @@ export const updateProduct = async (req, res) => {
     console.log(error);
     res.status(500).send({
       success: false,
-      message: "Error while updating product",
       error,
+      message: "Error in Update product",
     });
   }
 };

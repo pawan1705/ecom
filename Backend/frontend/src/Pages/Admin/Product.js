@@ -34,7 +34,7 @@ const Product = () => {
             {products?.map((p) => (
               <Link
                 key={p._id}
-                to={`/dashboard/admin/product/${p._id}`}
+                to={`/dashboard/admin/product/${p.slug}`}
                 className="product-link"
               >
                 <div class="col">
@@ -50,6 +50,7 @@ const Product = () => {
                       alt={p.name}
                     />
                     <div class="card-body">
+                      <h3 class="card-title">{p.price}₹</h3>
                       <h5 class="card-title">{p.name}</h5>
                       <p class="card-text">{p.description}</p>
                     </div>
