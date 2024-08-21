@@ -25,4 +25,21 @@ router.put(
   formidable(),
   productController.updateProduct
 );
+
+//filter product
+router.post("/product-filters", productController.filterProduct);
+
+//product Count
+router.get("/product-count", productController.productCount);
+router.get("/product-list/:page", productController.productList);
+
+//search product
+router.get("/search/:keyword", productController.searchProduct);
+
+//similar product
+router.get("/similar-product/:pid/:cid", productController.similarProduct);
+
+//category wise product route
+router.get("/product-category/:slug", productController.productCategorySingle);
+
 export default router;

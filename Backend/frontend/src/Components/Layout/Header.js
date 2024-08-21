@@ -2,14 +2,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { TbShoppingCartBolt } from "react-icons/tb";
 import { useAuth } from "../../context/auth";
 import toast from "react-hot-toast";
-import { useReducer } from "react";
-// import { assets } from "../../assets/assets";
+import { FaCartPlus } from "react-icons/fa";
 import "./Header.css";
-import { useEffect } from "react";
+import useCategory from "../../Hook/useCategory";
+import SearchInput from "../Form/SearchInput";
+import { useCart } from "../../context/cart";
+import { Badge } from "antd";
 const Header = () => {
   const navigate = useNavigate();
   const [auth, setAuth] = useAuth();
-
+  const categories = useCategory();
+  const [cart] = useCart();
   const handleLogout = () => {
     setAuth({
       ...auth,
@@ -43,35 +46,37 @@ const Header = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <form className="d-flex">
-            <input
-              className="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button
-              className="btn btn-outline-success text-light"
-              type="submit"
-            >
-              Search
-            </button>
-          </form>
+          <SearchInput />
           <ul className="option navbar-nav ms-auto mb-2 mb-lg-0">
             <li className="nav-item">
               <Link to="/" className="nav-link " aria-current="page">
                 Home
               </Link>
             </li>
-            <li className="nav-item">
+            {/* <li className="nav-item dropdown">
               <Link
-                to="/pagenotfound"
-                className="nav-link "
-                aria-current="page"
+                to={"/categories"}
+                className="nav-link dropdown-toggle"
+                data-bs-toggle="dropdown"
               >
-                Category
+                Categories
               </Link>
-            </li>
+              <ul className="dropdown-menu">
+                <li>
+                  <Link className="dropdown-item" to={`/categories`}>
+                    All Categories
+                  </Link>
+                </li>
+                {categories?.map((c) => (
+                  <li>
+                    <Link className="dropdown-item" to={`/category/${c.slug}`}>
+                      {c.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </li> */}
+
             {!auth.user ? (
               <>
                 <li className="nav-item">
@@ -129,10 +134,13 @@ const Header = () => {
               </>
             )}
 
-            <li className="nav-item">
-              <Link to="/pagenotfound" className="nav-link" aria-current="page">
-                Cart
-              </Link>
+            <li className="nav-item ">
+              <Badge count={cart?.length}>
+                <Link to="/cart" className="nav-link" aria-current="page">
+                  {/* Cart */}
+                  <FaCartPlus />
+                </Link>
+              </Badge>
             </li>
           </ul>
         </div>

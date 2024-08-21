@@ -1,4 +1,5 @@
 import ProductSchemaModel from "../Models/ProductModel.js";
+import CategorySchemaModel from "../Models/CategoryModel.js";
 import fs from "fs";
 import slugify from "slugify";
 export const createProduct = async (req, res) => {
@@ -175,6 +176,142 @@ export const updateProduct = async (req, res) => {
       success: false,
       error,
       message: "Error in Update product",
+    });
+  }
+};
+
+//filter
+export const filterProduct = async (req, res) => {
+  try {
+    const { checked, radio } = req.body;
+    let args = {};
+    if (checked.length > 0) args.category = checked;
+    if (radio.length) args.price = { $gte: radio[0], $lte: radio[1] };
+    const products = await ProductSchemaModel.find(args);
+    res.status(200).send({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      success: false,
+      message: "Error WHile Filtering Products",
+      error,
+    });
+  }
+};
+
+//product count
+export const productCount = async (req, res) => {
+  try {
+    const total = await ProductSchemaModel.find({}).estimatedDocumentCount();
+    res.status(200).send({
+      success: true,
+      message: "Count Displayed",
+      total,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      success: false,
+      message: "Error while count product",
+      error,
+    });
+  }
+};
+
+export const productList = async (req, res) => {
+  try {
+    const perPage = 6;
+    const page = req.params.page ? req.params.page : 1;
+    const products = await ProductSchemaModel.find({})
+      .select("-image")
+      .skip((page - 1) * perPage)
+      .limit(perPage)
+      .sort({ createdAt: -1 });
+    res.status(200).send({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      success: false,
+      message: "error in per page ctrl",
+      error,
+    });
+  }
+};
+
+export const searchProduct = async (req, res) => {
+  try {
+    const { keyword } = req.params;
+    const results = await ProductSchemaModel.find({
+      $or: [
+        { name: { $regex: keyword, $options: "i" } },
+        { description: { $regex: keyword, $options: "i" } },
+      ],
+    }).select("-image");
+    res.json(results);
+  } catch (error) {
+    console.log(error);
+    res.status(404).send({
+      success: false,
+      message: "Error while search product",
+      error,
+    });
+  }
+};
+
+//similar product -related product
+export const similarProduct = async (req, res) => {
+  try {
+    const { pid, cid } = req.params;
+    const product = await ProductSchemaModel.find({
+      category: cid,
+      _id: { $ne: pid },
+    })
+      .select("-image")
+      .limit(4)
+      .populate("category");
+    res.status(200).send({
+      success: true,
+      message: "related product showed successfully",
+      product,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      success: false,
+      message: "Error while similar product fetched",
+      error,
+    });
+  }
+};
+
+//get product by category
+export const productCategorySingle = async (req, res) => {
+  try {
+    const category = await CategorySchemaModel.findOne({
+      slug: req.params.slug,
+    });
+    console.log(slug);
+
+    const products = await ProductSchemaModel.find({ category }).populate(
+      "category"
+    );
+    res.status(200).send({
+      success: true,
+      category,
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      success: false,
+      error,
+      message: "Error While Getting products",
     });
   }
 };
