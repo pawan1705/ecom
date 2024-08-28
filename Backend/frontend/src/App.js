@@ -24,6 +24,7 @@ import ProductDetails from "./Pages/ProductDetails";
 import Categories from "./Pages/Categories";
 import CategoryProduct from "./Pages/CategoryProduct";
 import CartPage from "./Pages/CartPage";
+import AdminOrders from "./Pages/Admin/AdminOrders";
 function App() {
   return (
     <>
@@ -54,6 +55,7 @@ function App() {
           <Route path="admin/create-category" element={<CreateCategory />} />
           <Route path="admin/users" element={<Users />} />
           <Route path="admin/products" element={<Product />} />
+          <Route path="admin/orders" element={<AdminOrders />} />
         </Route>
 
         <Route path="/pagenotfound" element={<Pagenotfound />} />

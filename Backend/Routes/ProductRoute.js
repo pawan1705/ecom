@@ -42,4 +42,14 @@ router.get("/similar-product/:pid/:cid", productController.similarProduct);
 //category wise product route
 router.get("/product-category/:slug", productController.productCategorySingle);
 
+//payment route
+//token-braintree
+router.get("/braintree-token", productController.braintreeToken);
+
+router.post(
+  "/braintree-payment",
+  requireSignIn,
+  productController.braintreePayment
+);
+
 export default router;

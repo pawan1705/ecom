@@ -38,6 +38,14 @@ const AdminMenu = () => {
               Users
             </Link>
           </li>
+          <li className="list-group-item">
+            <Link
+              style={{ textDecoration: "none", color: "#464646" }}
+              to="/dashboard/admin/orders"
+            >
+              Orders
+            </Link>
+          </li>
         </ul>
       </div>
     </>

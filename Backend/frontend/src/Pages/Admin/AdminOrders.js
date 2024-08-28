@@ -1,17 +1,27 @@
-import React, { useState, useEffect } from "react";
-import UserMenu from "../../Components/Layout/UserMenu";
-import Layout from "../../Components/Layout/Layout";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import moment from "moment";
 import { useAuth } from "../../context/auth";
-const Order = () => {
+import Layout from "../../Components/Layout/Layout";
+import AdminMenu from "../../Components/Layout/AdminMenu";
+import moment from "moment";
+import { Select } from "antd";
+const { Option } = Select;
+const AdminOrders = () => {
+  const [status, setStatus] = useState([
+    "Not Process",
+    "Processing",
+    "Shipped",
+    "Delivered",
+    "cancel",
+  ]);
+  const [changeStatus, setChangeStatus] = useState("");
   const [orders, setOrders] = useState([]);
   const [auth] = useAuth();
 
   const getOrders = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:8080/api/v1/auth/orders"
+        "http://localhost:8080/api/v1/auth/all-orders"
       );
 
       setOrders(data);
@@ -24,14 +34,16 @@ const Order = () => {
     if (auth?.token) getOrders();
   }, [auth?.token]);
   return (
-    <Layout title="ECOM Dashboard-All users">
-      <div className="container-fluid m-3">
+    <>
+      <Layout>
         <div className="row">
           <div className="col-md-3">
-            <UserMenu />
+            <AdminMenu />
           </div>
           <div className="col-md-9">
             <h1 className="text-center">All Orders</h1>
+            <h1>start</h1>
+            {/* order start */}
             {orders?.map((o, i) => {
               return (
                 <div className="border shadow">
@@ -50,7 +62,19 @@ const Order = () => {
                     <tbody>
                       <tr>
                         <td>{i + 1}</td>
-                        <td>{o?.status}</td>
+                        <td>
+                          <Select
+                            bordered={false}
+                            onChange={(value) => setChangeStatus(value)}
+                            defaultValue={o?.status}
+                          >
+                            {status.map((s, i) => (
+                              <Option key={i} value={status}>
+                                {s}
+                              </Option>
+                            ))}
+                          </Select>
+                        </td>
                         <td>{o?.buyer?.name}</td>
                         <td>{moment(o?.createdAt).fromNow()}</td>
                         <td>{o?.payment?.success ? "Success" : "failed"}</td>
@@ -81,11 +105,12 @@ const Order = () => {
                 </div>
               );
             })}
+            {/* order end */}
           </div>
         </div>
-      </div>
-    </Layout>
+      </Layout>
+    </>
   );
 };
 
-export default Order;
+export default AdminOrders;

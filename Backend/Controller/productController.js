@@ -1,7 +1,18 @@
 import ProductSchemaModel from "../Models/ProductModel.js";
 import CategorySchemaModel from "../Models/CategoryModel.js";
 import fs from "fs";
+import dotenv from "dotenv";
 import slugify from "slugify";
+import braintree from "braintree";
+import OrderSchemaModel from "../Models/OrderModel.js";
+dotenv.config();
+//payment gateway
+var gateway = new braintree.BraintreeGateway({
+  environment: braintree.Environment.Sandbox,
+  merchantId: process.env.BRAINTREE_MERCHANT_ID,
+  publicKey: process.env.BRAINTREE_PUBLIC_KEY,
+  privateKey: process.env.BRAINTREE_PRIVATE_KEY,
+});
 export const createProduct = async (req, res) => {
   try {
     const { name, slug, description, price, category, quantity, shipping } =
@@ -312,6 +323,65 @@ export const productCategorySingle = async (req, res) => {
       success: false,
       error,
       message: "Error While Getting products",
+    });
+  }
+};
+
+//payment gateway api
+export const braintreeToken = async (req, res) => {
+  try {
+    gateway.clientToken.generate({}, function (err, response) {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        res.send(response);
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(200).send({
+      success: false,
+      message: "error while get braintree token",
+      error,
+    });
+  }
+};
+
+//payment
+export const braintreePayment = async (req, res) => {
+  try {
+    const { cart, nonce } = req.body;
+    let total = 0;
+    cart.map((i) => {
+      total += i.price;
+    });
+    let newTransaction = gateway.transaction.sale(
+      {
+        amount: total,
+        paymentMethodNonce: nonce,
+        options: {
+          submitForSettlement: true,
+        },
+      },
+      function (error, result) {
+        if (result) {
+          const order = OrderSchemaModel({
+            products: cart,
+            payment: result,
+            buyer: req.user._id,
+          }).save();
+          res.json({ ok: true });
+        } else {
+          res.status(500).send(error);
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      success: false,
+      message: "error in payment",
+      error,
     });
   }
 };

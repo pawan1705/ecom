@@ -23,4 +23,15 @@ router.get("/admin-auth", requireSignIn, isAdmin, (req, res) => {
 //forget password
 
 router.post("/change-password", registerController.forgotPassword);
+
+//update profile
+router.put("/profile", requireSignIn, registerController.updateProfile);
+
+router.get("/orders", requireSignIn, registerController.getOrder);
+router.get(
+  "/all-orders",
+  requireSignIn,
+  isAdmin,
+  registerController.getAllOrder
+);
 export default router;
