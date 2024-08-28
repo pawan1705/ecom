@@ -34,4 +34,12 @@ router.get(
   isAdmin,
   registerController.getAllOrder
 );
+
+//change order status
+router.put(
+  "/order-status/:orderId",
+  requireSignIn,
+  registerController.changeOrderStatus
+);
+
 export default router;

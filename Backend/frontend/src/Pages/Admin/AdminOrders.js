@@ -33,6 +33,18 @@ const AdminOrders = () => {
   useEffect(() => {
     if (auth?.token) getOrders();
   }, [auth?.token]);
+
+  const handleChange = async (orderId, value) => {
+    try {
+      const { data } = await axios.put(
+        `http://localhost:8080/api/v1/auth/order-status/${orderId}`,
+        { status: value }
+      );
+      getOrders();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <Layout>
@@ -65,11 +77,11 @@ const AdminOrders = () => {
                         <td>
                           <Select
                             bordered={false}
-                            onChange={(value) => setChangeStatus(value)}
+                            onChange={(value) => handleChange(o._id, value)}
                             defaultValue={o?.status}
                           >
                             {status.map((s, i) => (
-                              <Option key={i} value={status}>
+                              <Option key={i} value={s}>
                                 {s}
                               </Option>
                             ))}

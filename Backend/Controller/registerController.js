@@ -211,13 +211,35 @@ export const getAllOrder = async (req, res) => {
       .populate("products", "-image")
       .populate("buyer", "name");
 
-    res.json(orders).sort({ createdAt: "-1" });
+    res.json(orders);
   } catch (error) {
     console.log(error);
     res.status(500).send({
       success: false,
       message: "error while fetching orders",
       error,
+    });
+  }
+};
+
+//change order status
+
+export const changeOrderStatus = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { status } = req.body;
+    const orders = await OrderSchemaModel.findByIdAndUpdate(
+      orderId,
+      { status },
+      { new: true }
+    );
+    res.json(orders);
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      success: false,
+      error,
+      message: "Error while updating order status",
     });
   }
 };
